@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: stride-scraper
-            image: your-registry/stride-scraper:latest
+            image: stride-mac-registry/stride-scraper:latest
             envFrom:
             - secretRef:
                 name: aws-credentials

@@ -41,7 +41,7 @@ class StorageManager:
 
 if __name__ == "__main__":
     # For testing purposes
-    storage = StorageManager('your-bucket-name')
+    storage = StorageManager('stride-airdrop-bucket')
     test_delegations = {
         "user1": {"validator1": 1000, "validator2": 2000},
         "user2": {"validator1": 1500, "validator3": 3000}

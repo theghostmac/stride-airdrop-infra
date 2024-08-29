@@ -1,12 +1,16 @@
 import requests
-from typing import List, Dict
+from typing import List, Dict, Optional
 from pydantic import BaseModel
+from validator_scraper import fetch_validators
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class Delegation(BaseModel):
     delegator_address: str
     validator_address: str
     shares: str
-
 
 class Balance(BaseModel):
     denom: str
@@ -17,9 +21,8 @@ class DelegationResponse(BaseModel):
     balance: Balance
 
 class DelegationsResponse(BaseModel):
-    delegations_response: List[DelegationResponse]
-    pagination: Dict[str, str]
-
+    delegation_responses: List[DelegationResponse]
+    pagination: Dict[str, Optional[str]]
 
 BASE_URL = "https://stride-walk-214t-api.polkachu.com/cosmos/staking/v1beta1/validators/{}/delegations"
 
@@ -42,11 +45,13 @@ def fetch_delegations(validator_address: str) -> List[DelegationResponse]:
 
     return delegations
 
-def process_delegations(validators: List[str]) -> Dict[str, Dict[str, int]]:
+def process_all_delegations() -> Dict[str, Dict[str, int]]:
     user_delegations = {}
+    validators = fetch_validators()
 
     for validator in validators:
-        delegations = fetch_delegations(validator)
+        logger.info(f"Fetching delegations for validator: {validator.operator_address}")
+        delegations = fetch_delegations(validator.operator_address)
         for delegation in delegations:
             delegator = delegation.delegation.delegator_address
             amount = int(delegation.balance.amount)
@@ -54,17 +59,12 @@ def process_delegations(validators: List[str]) -> Dict[str, Dict[str, int]]:
             if delegator not in user_delegations:
                 user_delegations[delegator] = {}
 
-            user_delegations[delegator][validator] = amount
+            user_delegations[delegator][validator.operator_address] = amount
 
     return user_delegations
 
 if __name__ == "__main__":
-    from validator_scraper import fetch_validators
-
-    validators = fetch_validators()
-    validator_addresses = [v.operator_address for v in validators[:5]] # using the first 5 validators to test.
-    user_delegations = process_delegations(validator_addresses)
-
-    print(f"Total users with delegations: {len(user_delegations)}")
+    user_delegations = process_all_delegations()
+    logger.info(f"Total users with delegations: {len(user_delegations)}")
     for user, delegations in list(user_delegations.items())[:5]:
-        print(f"User {user}: {delegations}")
+        logger.info(f"User {user}: {delegations}")

@@ -3,3 +3,9 @@
 /.idea
 
 /venv
+
+iam_user_creds.csv
+
+AccessKeys.csv
+
+cmds

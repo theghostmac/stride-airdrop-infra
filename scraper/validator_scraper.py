@@ -1,5 +1,5 @@
 import requests
-from typing import List, Dict
+from typing import List, Dict, Optional
 from pydantic import BaseModel
 
 class Validator(BaseModel):
@@ -9,7 +9,7 @@ class Validator(BaseModel):
 
 class ValidatorResponse(BaseModel):
     validators: List[Validator]
-    pagination: Dict[str, str]
+    pagination: Dict[str, Optional[str]]
 
 
 BASE_URL = "https://stride-walk-214t-api.polkachu.com/cosmos/staking/v1beta1/validators"
