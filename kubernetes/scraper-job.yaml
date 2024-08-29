@@ -1,0 +1,17 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: stride-scraper
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: stride-scraper
+            image: your-registry/stride-scraper:latest
+            envFrom:
+            - secretRef:
+                name: aws-credentials
+          restartPolicy: OnFailure
