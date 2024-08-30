@@ -1,8 +1,8 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from .models import Base, User, Stake, Reward, Claim, DailySummary
 from typing import List, Dict
-from datetime import datetime
+from datetime import datetime, UTC
 
 class DatabaseManager:
     def __init__(self, db_url: str):
@@ -128,9 +128,9 @@ class DatabaseManager:
             ).first()
 
             return {
-                'average_staked': float(result.average_staked),
-                'average_eligible_users': float(result.average_eligible_users),
-                'max_stake': float(result.max_stake)
+                'average_staked': float(result.average_staked) if result.average_staked else 0.0,
+                'average_eligible_users': float(result.average_eligible_users) if result.average_eligible_users else 0.0,
+                'max_stake': float(result.max_stake) if result.max_stake else 0.0
             }
         finally:
             session.close()

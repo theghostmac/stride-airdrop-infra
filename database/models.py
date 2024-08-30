@@ -57,3 +57,4 @@ class DailySummary(Base):
     largest_stake = Column(BigInteger)
     total_users = Column(Integer)
     eligible_users = Column(Integer)
+    total_rewards = Column(BigInteger)
