@@ -1,0 +1,2 @@
+database:
+    url: postgresql://ghostmac:gh05tm4c@localhost:5432/stride_airdrop
