@@ -59,7 +59,7 @@ class RewardCalculator:
         delegations, rewards = self.process_rewards(date)
         if address in rewards:
             reward = rewards[address]
-            if self.claim_tracker.record_claim(address, date):
+            if self.claim_tracker.record_claims(address, date):
                 reward *= 2  # Double the reward for early claimers
             return reward
         return 0
