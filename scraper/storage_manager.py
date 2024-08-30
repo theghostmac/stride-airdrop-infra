@@ -39,6 +39,18 @@ class StorageManager:
                 print(f"Error retrieving delegations: {e}")
                 raise
 
+    def store_file(self, file_name: str, content: str):
+        try:
+            self.s3.put_object(
+                Bucket=self.bucket_name,
+                Key=file_name,
+                Body=content,
+                ContentType='application/json',
+            )
+        except Exception as e:
+            print(f"Error storing file {file_name}: {e}")
+
+
 if __name__ == "__main__":
     # For testing purposes
     storage = StorageManager('stride-airdrop-bucket')

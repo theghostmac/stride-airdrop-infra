@@ -22,6 +22,11 @@ def main():
 
         # TODO: Store rewards and summary in the db. coming soon.
 
+        # simulating claims for testing
+        for address in list(rewards.keys())[:10]:
+            claimed_reward = calculator.claim_reward(address, date)
+            logger.info(f"Address {address} claimed {claimed_reward} ustrd")
+
     except Exception as e:
         logger.error(f"An error occurred: {str(e)}")
 
