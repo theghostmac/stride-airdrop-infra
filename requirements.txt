@@ -1,7 +1,7 @@
-requests==2.31.0
-pydantic==2.5.2
-boto3==1.28.85
-sqlalchemy==1.4.46
-psycopg2-binary==2.9.5
-alembic==1.9.2
-python-dotenv==1.0.0
+requests
+pydantic
+boto3
+sqlalchemy
+psycopg2-binary
+alembic
+python-dotenv
