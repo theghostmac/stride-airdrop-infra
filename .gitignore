@@ -9,3 +9,9 @@ iam_user_creds.csv
 AccessKeys.csv
 
 cmds
+
+config/
+
+kubernetes/database-url.yaml
+.env
+.env.example

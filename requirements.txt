@@ -4,3 +4,4 @@ boto3==1.28.85
 sqlalchemy==1.4.46
 psycopg2-binary==2.9.5
 alembic==1.9.2
+python-dotenv==1.0.0
