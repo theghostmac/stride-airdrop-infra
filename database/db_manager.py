@@ -89,20 +89,33 @@ class DatabaseManager:
             unclaimed_rewards = session.query(Reward).filter(
                 Reward.user_address == address,
                 Reward.claimed == False
-            ).all(),
+            ).all()
 
             total_claimed = sum(reward.amount for reward in unclaimed_rewards)
+            claim_time = datetime.now(UTC)
 
             # mark rewards as claimed.
             for reward in unclaimed_rewards:
                 reward.claimed = True
+                reward.claimed_at = claim_time
 
             # record the claim.
-            claim = Claim(user_address=address, amount=total_claimed, date=datetime.now(UTC))
+            claim = Claim(user_address=address, amount=total_claimed, date=claim_time)
             session.add(claim)
 
             session.commit()
             return total_claimed
+        finally:
+            session.close()
+
+
+    def get_claimed_rewards(self, address: str) -> int:
+        session = self.get_session()
+        try:
+            return session.query(Reward).filter(
+                Reward.user_address == address,
+                Reward.claimed == True
+            ).all()
         finally:
             session.close()
 
