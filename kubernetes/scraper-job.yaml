@@ -14,4 +14,6 @@ spec:
             envFrom:
             - secretRef:
                 name: aws-credentials
+            - secretRef:
+                name: database-secrets
           restartPolicy: OnFailure

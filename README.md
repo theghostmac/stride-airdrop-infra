@@ -90,6 +90,11 @@ ORDER BY
 - add more panels for different metrics.
 - setup auto-refresh, 1 hour for hourly updates.
 
+Connecting directly:
+```shell
+kubectl run -it --rm --image=postgres:15 --restart=Never postgres-client -- psql -h postgres -U ghostmac -d stride_airdrop
+```
+
 Test the scraper and reward calculator jobs:
 ```shell
 kubectl create job --from=cronjob/stride-scraper stride-scraper-test
@@ -100,6 +105,11 @@ Monitor logs:
 ```shell
 kubectl logs job/stride-scraper-test
 kubectl logs job/stride-reward-calculator-test
+```
+
+Troubleshooting PostgreSQL data source for Grafana:
+```shell
+kubectl logs $(kubectl get pods -l app=postgres -o jsonpath="{.items[0].metadata.name}")
 ```
 
 # Taking note of time used
