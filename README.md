@@ -117,3 +117,5 @@ challenge: the math for `calculate_rewards` was really tricky.
 1 hour 18 minutes on `task5/claims` on Monday.
 also fixes to api-service.
 
+1 hour 3 minutes on `task6/dashboard` on Monday.
+updates to manifests, deploying grafana, and setting up all services on Docker and K8s.
