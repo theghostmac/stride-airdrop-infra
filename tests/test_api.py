@@ -50,15 +50,26 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"address": "test_address", "amount": 300})
 
-    @patch('api.dependencies.get_db_manager')
-    def test_claim_rewards(self, mock_get_db_manager):
+
+    @patch('api.dependencies.get_db')
+    def test_claim_rewards(self, mock_get_db):
         mock_db = MagicMock()
         mock_db.claim_rewards.return_value = 500
-        mock_get_db_manager.return_value = mock_db
+        mock_get_db.return_value = mock_db
 
         response = self.client.post("/api/claim/test_address")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"address": "test_address", "claimed_amount": 500})
+
+    @patch('api.dependencies.get_db')
+    def test_claim_rewards_with_no_rewards(self, mock_get_db):
+        mock_db = MagicMock()
+        mock_db.claim_rewards.return_value = 0
+        mock_get_db.return_value = mock_db
+
+        response = self.client.post("/api/claim/test_address")
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {"detail": "No rewards to claim"})
 
 if __name__ == '__main__':
     unittest.main()
