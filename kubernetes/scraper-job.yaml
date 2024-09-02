@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: stride-scraper
@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: stride-scraper
-            image: stride-mac-registry/stride-scraper:latest
+            image: theghostmac/stride-scraper:latest
             envFrom:
             - secretRef:
                 name: aws-credentials
