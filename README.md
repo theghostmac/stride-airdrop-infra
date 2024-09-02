@@ -31,16 +31,26 @@ kubectl apply -f kubernetes/grafana-deployment.yaml
 Verify all pods are running:
 ```shell
 kubectl get pods
+NAME                                   READY   STATUS              RESTARTS   AGE
+grafana-d97c55c95-tr8xm                1/1     Running             0          46m
+postgres-c4769ff99-wbz9x               1/1     Running             0          65s
+stride-api-554fbf5f7f-46pt7            1/1     Running             0          60s
+stride-api-554fbf5f7f-bwnzg            1/1     Running             0          60s
+stride-api-554fbf5f7f-gmjd2            1/1     Running             0          60s
 ```
 
 Access the API:
 ```shell
 kubectl get services stride-api
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+stride-api   LoadBalancer   10.99.147.144   <pending>     80:30787/TCP   2m29s
 ```
 
 Access Grafana:
 ```shell
 kubectl get services grafana
+NAME      TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+grafana   LoadBalancer   10.98.113.109   <pending>     80:31876/TCP   48m
 ```
 
 Set up Grafana:
