@@ -54,8 +54,25 @@ grafana   LoadBalancer   10.98.113.109   <pending>     80:31876/TCP   48m
 ```
 
 Set up Grafana:
+- access Grafana:
+  - external-ip pending, so port-forwarding: `kubectl port-forward service/grafana 3000:80`
+  - open browser at http://localhost:3000
+  - login with username: admin, password: admin. change password after.
 - add postgresSQL data source using the postgres service name as the host.
-- create dashboard with a panel using:
+  - click Gear icon to open Config menu
+  - select "Data Sources"
+  - Add data source
+  - Choose "PostgreSQL"
+  - fill the info:
+    - name: Stride Airdrop DB
+    - host: postgres:5432
+    - database: stride_airdrop
+    - user: ghostmac
+    - password: gh05tm4c
+    - ssl mode: disable
+  - click save and test.
+  - create new dashboard: click +, select Dashboard, and Add new panel.
+  - select PostgreSQL data source, switch to Code mode, add the SQL query below:
 ```sql
 SELECT
   date_trunc('day', date) AS time,
@@ -67,6 +84,11 @@ GROUP BY
 ORDER BY
   time
 ```
+  - in panel options on right, set the title to "Total Rewards Claimed Over Time", under visualization, choose Time Series.
+  - click "Apply"
+- Save the dashboard: click Save icon. Name it "Stride Airdrop Analytics", click Save.
+- add more panels for different metrics.
+- setup auto-refresh, 1 hour for hourly updates.
 
 Test the scraper and reward calculator jobs:
 ```shell
