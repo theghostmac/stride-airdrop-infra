@@ -1,0 +1,17 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: stride-reward-calculator
+spec:
+  schedule: "5 0 * * *"  # Run 5 minutes after the scraper job
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: stride-reward-calculator
+            image: stride-mac-registry/stride-reward-calculator:latest
+            envFrom:
+            - secretRef:
+                name: aws-credentials
+          restartPolicy: OnFailure
