@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: stride-reward-calculator
@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: stride-reward-calculator
-            image: stride-mac-registry/stride-reward-calculator:latest
+            image: theghostmac/stride-reward-calculator:latest
             envFrom:
             - secretRef:
                 name: aws-credentials
