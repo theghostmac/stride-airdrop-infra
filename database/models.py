@@ -31,7 +31,7 @@ class Reward(Base):
     id = Column(Integer, primary_key=True)
     user_address = Column(String, ForeignKey('users.address'))
     amount = Column(BigInteger)
-    date = Column(DateTime, default=datetime.utcnow)
+    claimed_at = Column(DateTime, default=datetime.utcnow)
     claimed = Column(Boolean, default=False)
 
     user = relationship("User", back_populates="rewards")

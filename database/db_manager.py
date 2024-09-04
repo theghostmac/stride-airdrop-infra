@@ -52,6 +52,7 @@ class DatabaseManager:
         finally:
             session.close()
 
+
     def store_daily_summary(self, summary: Dict[str, int], date: datetime):
         session = self.get_session()
         try:
@@ -81,30 +82,51 @@ class DatabaseManager:
             session.close()
 
 
-    def get_user_rewards(self, address: str, date: datetime = None) -> List[Reward]:
-        session = self.get_session()
-        try:
-            query = session.query(Reward).filter(Reward.user_address == address)
-            if date:
-                query = query.filter(Reward.date == date)
-            return query.all()
-        finally:
-            session.close()
-
     def claim_rewards(self, address: str) -> int:
         session = self.get_session()
         try:
-            rewards = session.query(Reward).filter(Reward.user_address == address, Reward.claimed == False).all()
-            total_claimed = sum(reward.amount for reward in rewards)
+            # get all unclaimed rewards for the user.
+            unclaimed_rewards = session.query(Reward).filter(
+                Reward.user_address == address,
+                Reward.claimed == False
+            ).all()
 
-            for reward in rewards:
+            total_claimed = sum(reward.amount for reward in unclaimed_rewards)
+            claim_time = datetime.now(UTC)
+
+            # mark rewards as claimed.
+            for reward in unclaimed_rewards:
                 reward.claimed = True
+                reward.claimed_at = claim_time
 
-            claim = Claim(user_address=address, amount=total_claimed)
+            # record the claim.
+            claim = Claim(user_address=address, amount=total_claimed, date=claim_time)
             session.add(claim)
 
             session.commit()
             return total_claimed
+        finally:
+            session.close()
+
+
+    def get_claimed_rewards(self, address: str) -> int:
+        session = self.get_session()
+        try:
+            return session.query(Reward).filter(
+                Reward.user_address == address,
+                Reward.claimed == True
+            ).all()
+        finally:
+            session.close()
+
+
+    def get_user_rewards(self, address: str, include_claimed: bool = False):
+        session = self.get_session()
+        try:
+            query = session.query(Reward).filter(Reward.user_address == address)
+            if not include_claimed:
+                query = query.filter(Reward.claimed == False)
+            return query.all()
         finally:
             session.close()
 

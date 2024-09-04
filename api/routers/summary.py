@@ -24,4 +24,4 @@ def get_daily_summary(date: str, db: DatabaseManager = Depends(get_db)):
             "eligible_users": summary.eligible_users,
         }
 
-    return {"error": "No summary found for the given date"}
+    return {"error": "No summary found for the given claimed_at"}
